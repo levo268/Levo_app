@@ -15,10 +15,14 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter create --platforms=android .
+      - run: sed -i 's/android:label=".*"/android:label="LEVO"/g' android/app/src/main/AndroidManifest.xml || true
+      - run: sed -i 's/compileSdkVersion .*/compileSdkVersion 34/g' android/app/build.gradle || true
+      - run: sed -i 's/targetSdkVersion .*/targetSdkVersion 34/g' android/app/build.gradle || true
       - run: flutter pub get
       - run: flutter build apk --split-per-abi
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: levo-app-apk
-          path: build/app/outputs/flutter-apk/*.apk
+          name: levo-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          
