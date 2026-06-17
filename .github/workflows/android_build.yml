@@ -17,7 +17,7 @@ jobs:
       - run: flutter pub get
       - run: flutter build apk --split-per-abi
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: levo-app-apk
           path: build/app/outputs/flutter-apk/*.apk
