@@ -13,9 +13,8 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: Auto Fix Android Project Configuration
+      - name: Recreate Android Project Configuration
         run: |
-          # Android build files ko automatic naye standard par upgrade karega
           flutter create --platforms=android .
           flutter pub get
 
