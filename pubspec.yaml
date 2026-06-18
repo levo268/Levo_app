@@ -7,18 +7,18 @@ environment:
 
 dependencies:
   flutter:
-  assets:
-    - assets/logo.png
     sdk: flutter
   firebase_core: ^3.0.0
   firebase_auth: ^5.0.0
   cloud_firestore: ^5.0.0
   google_fonts: ^6.2.1
   font_awesome_flutter: ^10.7.0
-  assets:
-    - assets/logo.png
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
 flutter:
+  uses-material-design: true
   assets:
     - assets/logo.png
-  uses-material-design: true
