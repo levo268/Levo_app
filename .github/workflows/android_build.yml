@@ -11,8 +11,12 @@ jobs:
         with:
           flutter-version: '3.19.0'
           cache: false
-      - name: Force Fetch Dependencies
-        run: flutter pub get
+      - name: Force Clean Build Environment
+        run: |
+          cd android
+          ./gradlew clean || true
+          cd ..
+          flutter pub get
       - name: Build APK Release
         run: flutter build apk --release --no-tree-shake-icons
       - name: Upload APK
