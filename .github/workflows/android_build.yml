@@ -13,8 +13,9 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: Recreate Android Project Configuration
+      - name: Recreate Android Framework
         run: |
+          rm -rf android
           flutter create --platforms=android .
           flutter pub get
 
