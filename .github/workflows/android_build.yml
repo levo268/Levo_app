@@ -19,17 +19,22 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: Clean and Recreate
+      - name: Clean Environment
         run: |
           rm -rf android
           flutter clean
           flutter create --platforms=android .
           flutter pub get
 
-      - name: Compile and Trace Dart
+      - name: Catch Exact Dart Error
         run: |
-          flutter analyze || true
-          flutter build apk --release --no-tree-shake-icons --verbose
+          echo "=== DART CODE CHECKING START ==="
+          flutter analyze > analyze.log 2>&1 || true
+          cat analyze.log | grep -E "error •|line" || echo "No syntax errors found in analyze"
+          echo "=== DART CODE CHECKING END ==="
+
+      - name: Build APK Release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
