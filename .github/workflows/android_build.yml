@@ -8,21 +8,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: false
 
-      - name: Force Fix Environment and Dependencies
+      - name: Setup Android SDK and Licenses
+        run: |
+          mkdir -p ${ANDROID_HOME}/licenses
+          echo -e "\n244d2d9e8db31f3b504afb9256b3414dd7a7c837\n28a4a7ab533b28cedc6484e366da616f94e9f56b" > ${ANDROID_HOME}/licenses/android-sdk-license
+          echo -e "\n893a6a6d397504d5ef0c55d0848154100d4356e0" > ${ANDROID_HOME}/licenses/android-sdk-preview-license
+          echo -e "\nccb6221fcc01c6a19fc13da1d34c11df2e6d93e4" > ${ANDROID_HOME}/licenses/android-sdk-arm-dbt-license
+
+      - name: Hard Reset Android Configuration
         run: |
           rm -rf android
           flutter create --platforms=android .
-          cd android
-          echo "android.dir=." > local.properties
-          cd ..
+          flutter pub upgrade --major-versions
           flutter pub get
 
-      - name: Build APK Release
+      - name: Build Production APK
         run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
