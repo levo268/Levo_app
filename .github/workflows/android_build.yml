@@ -13,19 +13,17 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: Auto Accept Android Licenses
-        run: |
-          yes | foo || true
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Recreate Android Framework
+      - name: Force Fix Environment and Dependencies
         run: |
           rm -rf android
           flutter create --platforms=android .
+          cd android
+          echo "android.dir=." > local.properties
+          cd ..
           flutter pub get
 
       - name: Build APK Release
-        run: flutter build apk --release --no-tree-shake-icons --no-pub
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
