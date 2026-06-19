@@ -19,26 +19,19 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: Reset Android Config
+      - name: Clean and Recreate
         run: |
           rm -rf android
+          flutter clean
           flutter create --platforms=android .
           flutter pub get
 
-      - name: Build APK with Auto Error Log
+      - name: Compile and Trace Dart
         run: |
-          flutter build apk --release --no-tree-shake-icons --verbose > build_failed.log 2>&1 || true
-          if [ -d "build/app/outputs/flutter-apk" ]; then
-            echo "Build Success!"
-          else
-            echo "=================== ASLI ERROR LOG NEECHE HAI ==================="
-            cat build_failed.log | grep -E -A 10 "error:|Exception|failed:|Error" || cat build_failed.log | tail -n 100
-            echo "================================================================"
-            exit 1
-          fi
+          flutter analyze || true
+          flutter build apk --release --no-tree-shake-icons --verbose
 
       - name: Upload APK
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: levo-premium-app
